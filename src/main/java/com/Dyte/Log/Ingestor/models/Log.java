@@ -1,6 +1,7 @@
 package com.Dyte.Log.Ingestor.models;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 
@@ -17,11 +18,20 @@ import java.util.Date;
 //        "parentResourceId": "server-0987"
 //        }
 //}
+
+enum LoggingLevel
+{
+    debug,warn,info,trace,error,fatal
+}
 @Data
 public class Log {
-    String level,message,resourceId,traceId,spanId,commit;
+    @Id
+    String id;
+    String message,resourceId,traceId,spanId,commit;
+    LoggingLevel level;
     Date timestamp;
     MetaData metadata;
+
 
 }
 
