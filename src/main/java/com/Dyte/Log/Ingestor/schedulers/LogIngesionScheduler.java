@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -17,20 +18,27 @@ public class LogIngesionScheduler {
     MongoTemplate mongoTemplate;
 
     @Scheduled(fixedDelay = 6000)
-    void flushtoDB()
+
+    public void flushtoDB()
     {
-        List<Log> logList= LogData.logList;
-        if(!logList.isEmpty())
+        //issue with concurrency
+        List<Log> origLogList= LogData.logList;
+        List<Log>copyLogList=new ArrayList<Log>();
+        for(Log log: origLogList)
+        {
+            copyLogList.add(log);
+        }
+        if(!copyLogList.isEmpty())
         {
             try {
                 final BulkOperations bulkOperations = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, Log.class);
-                final BulkWriteResult execute = bulkOperations.insert(logList).execute();
+                final BulkWriteResult execute = bulkOperations.insert(copyLogList).execute();
             }
             catch (Exception exception)
             {
                 System.out.println(exception.getMessage());
             }
-            logList.clear();
+            LogData.logList=LogData.logList.subList(copyLogList.size(),origLogList.size());
         }
     }
 }
