@@ -33,7 +33,7 @@ public class LogController {
     }
 
     @PostMapping("/bulk")
-    public ResponseEntity<?> bulkAddLogs(@RequestBody MultipartFile logs)
+    public ResponseEntity<?> bulkAddLogs(@RequestBody List<Log> logs)
     {
 
         logService.bulkAdd(logs);
