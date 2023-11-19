@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class LogController {
     public ResponseEntity<?> addLog(@RequestBody Log log)
     {
         logService.addLog(log);
-        return new ResponseEntity<>("done", HttpStatus.OK);
+        return new ResponseEntity<>("queued", HttpStatus.OK);
     }
 
     @GetMapping("/log")
@@ -31,6 +32,12 @@ public class LogController {
 
     }
 
+    @PostMapping("/bulk")
+    public ResponseEntity<?> bulkAddLogs(@RequestBody MultipartFile logs)
+    {
 
+        logService.bulkAdd(logs);
+        return new ResponseEntity<>("added", HttpStatus.OK);
+    }
 
 }

@@ -10,4 +10,6 @@ public interface LogService {
     void addLog(Log log);
 
     List<Log> getLogs(LogFilter logFilters);
+
+    public void bulkAdd(List<Log>logs);
 }

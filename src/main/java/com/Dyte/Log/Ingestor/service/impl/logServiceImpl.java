@@ -4,8 +4,10 @@ import com.Dyte.Log.Ingestor.models.LogData;
 import com.Dyte.Log.Ingestor.models.Log;
 import com.Dyte.Log.Ingestor.models.LogFilter;
 import com.Dyte.Log.Ingestor.service.LogService;
+import com.mongodb.bulk.BulkWriteResult;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.CollectionCallback;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -73,6 +75,18 @@ public class logServiceImpl implements LogService {
              return true;
          }
          return false;
+    }
+
+    public void bulkAdd(List<Log>logs)
+    {
+        try {
+            final BulkOperations bulkOperations = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, Log.class);
+            final BulkWriteResult execute = bulkOperations.insert(logs).execute();
+        }
+        catch (Exception exception)
+        {
+            System.out.println(exception.getMessage());
+        }
     }
 
 }
