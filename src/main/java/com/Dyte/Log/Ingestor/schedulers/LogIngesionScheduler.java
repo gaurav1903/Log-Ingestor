@@ -17,7 +17,7 @@ public class LogIngesionScheduler {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    @Scheduled(fixedDelay = 6000)
+    @Scheduled(fixedDelay = 60000)
 
     public void flushtoDB()
     {
